@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zhiyou.jump.manager.system.dao.TaskDao">
+
+	<select id="get" resultType="com.zhiyou.jump.manager.dto.system.TaskDto">
+		<![CDATA[
+			SELECT
+				a.id,
+				a.cronExpression,
+				a.description,
+				a.beanClass,
+				a.jobStatus,
+				a.jobGroup,
+				a.jobName,
+				a.createTime,
+				a.modifiedTime
+			FROM
+				sys_task AS a
+			WHERE
+				a.id = #{id}
+		]]>
+	</select>
+
+	<select id="list" resultType="com.zhiyou.jump.manager.dto.system.TaskDto">
+		<![CDATA[
+			SELECT
+				a.id,
+				a.cronExpression,
+				a.description,
+				a.beanClass,
+				a.jobStatus,
+				a.jobGroup,
+				a.jobName,
+				a.createTime,
+				a.modifiedTime
+			FROM
+				sys_task AS a
+		]]>
+        <where>  
+  		  	<if test="id != null and id != ''"> and a.id = #{id} </if>
+  		  	<if test="cronExpression != null and cronExpression != ''"> and a.cronExpression = #{cronExpression} </if>
+  		  	<if test="description != null and description != ''"> and a.description = #{description} </if>
+  		  	<if test="beanClass != null and beanClass != ''"> and a.beanClass = #{beanClass} </if>
+  		  	<if test="jobStatus != null and jobStatus != ''"> and a.jobStatus = #{jobStatus} </if>
+  		  	<if test="jobGroup != null and jobGroup != ''"> and a.jobGroup = #{jobGroup} </if>
+  		  	<if test="jobName != null and jobName != ''"> and a.jobName = #{jobName} </if>
+  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by a.id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		<![CDATA[
+			SELECT
+				COUNT(*)
+			FROM
+				sys_task AS a
+		]]>
+		<where>  
+  		    <if test="id != null and id != ''"> and a.id = #{id} </if>
+  		  	<if test="cronExpression != null and cronExpression != ''"> and a.cronExpression = #{cronExpression} </if>
+  		  	<if test="description != null and description != ''"> and a.description = #{description} </if>
+  		  	<if test="beanClass != null and beanClass != ''"> and a.beanClass = #{beanClass} </if>
+  		  	<if test="jobStatus != null and jobStatus != ''"> and a.jobStatus = #{jobStatus} </if>
+  		  	<if test="jobGroup != null and jobGroup != ''"> and a.jobGroup = #{jobGroup} </if>
+  		  	<if test="jobName != null and jobName != ''"> and a.jobName = #{jobName} </if>
+  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.zhiyou.jump.manager.dto.system.TaskDto" useGeneratedKeys="true" keyProperty="id">
+		<![CDATA[
+			INSERT INTO sys_task(
+				`cronExpression`, 
+				`description`, 
+				`beanClass`, 
+				`jobStatus`, 
+				`jobGroup`, 
+				`jobName`,
+				`createTime`, 
+				`modifiedTime`
+			) VALUES (
+				#{cronExpression}, 
+				#{description}, 
+				#{beanClass}, 
+				#{jobStatus}, 
+				#{jobGroup}, 
+				#{jobName},
+				#{createTime}, 
+				#{modifiedTime}
+			)
+		]]>
+	</insert>
+	 
+	<update id="update" parameterType="com.zhiyou.jump.manager.dto.system.TaskDto">
+		<![CDATA[UPDATE sys_task]]>
+		<set>
+			<if test="cronExpression != null">`cronExpression` = #{cronExpression}, </if>
+			<if test="description != null">`description` = #{description}, </if>
+			<if test="beanClass != null">`beanClass` = #{beanClass}, </if>
+			<if test="jobStatus != null">`jobStatus` = #{jobStatus}, </if>
+			<if test="jobGroup != null">`jobGroup` = #{jobGroup}, </if>
+			<if test="jobName != null">`jobName` = #{jobName}, </if>
+			<if test="createTime != null">`createTime` = #{createTime}, </if>
+			<if test="modifiedTime != null">`modifiedTime` = #{modifiedTime}</if>
+		</set>
+		<![CDATA[WHERE id = #{id}]]>
+	</update>
+	
+	<delete id="remove">
+		<![CDATA[DELETE FROM sys_task WHERE id = #{id}]]>
+	</delete>
+	
+	<delete id="batchRemove">
+		<![CDATA[DELETE FROM sys_task WHERE id IN]]>
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

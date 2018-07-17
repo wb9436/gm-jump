@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zhiyou.jump.manager.app.dao.UserInfoDao">
+
+	<select id="get" resultType="com.zhiyou.jump.manager.dto.app.UserInfoDto">
+		<![CDATA[
+			SELECT
+				a.userId,
+				a.openid,
+				a.nickName,
+				a.avatarUrl,
+				a.gender,
+				a.score,
+				a.createTime,
+				a.modifiedTime
+			FROM
+				app_user_info AS a
+			WHERE
+				a.openid = #{openid}
+		]]>
+	</select>
+
+	<select id="getById" resultType="com.zhiyou.jump.manager.dto.app.UserInfoDto">
+		<![CDATA[
+			SELECT
+				a.userId,
+				a.openid,
+				a.nickName,
+				a.avatarUrl,
+				a.gender,
+				a.score,
+				a.createTime,
+				a.modifiedTime
+			FROM
+				app_user_info AS a
+			WHERE
+				a.userId = #{userId}
+		]]>
+	</select>
+
+	<select id="list" resultType="com.zhiyou.jump.manager.dto.app.UserInfoDto">
+		<![CDATA[
+			SELECT
+				a.userId,
+				a.openid,
+				a.nickName,
+				a.avatarUrl,
+				a.gender,
+				a.score,
+				a.createTime,
+				a.modifiedTime
+			FROM
+				app_user_info AS a
+		]]>
+        <where>  
+	  		<if test="userId != null and userId != ''"> and a.userId = #{userId} </if>
+  		  	<if test="nickName != null and nickName != ''"> and a.nickName = #{nickName} </if>
+  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by a.userId desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		<![CDATA[
+			SELECT
+				COUNT(*)
+			FROM
+				app_user_info AS a
+		]]>
+		<where>  
+	  		<if test="userId != null and userId != ''"> and a.userId = #{userId} </if>
+  		  	<if test="nickName != null and nickName != ''"> and a.nickName = #{nickName} </if>
+  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.zhiyou.jump.manager.dto.app.UserInfoDto" useGeneratedKeys="true" keyProperty="userId">
+		<![CDATA[
+			INSERT INTO app_user_info(
+				openid,
+				nickName,
+				avatarUrl,
+				gender,
+				score,
+				createTime,
+				modifiedTime
+			)VALUES(
+				#{openid}, 
+				#{nickName}, 
+				#{avatarUrl}, 
+				#{gender}, 
+				#{score}, 
+				#{createTime}, 
+				#{modifiedTime}
+			)
+		]]>
+	</insert>
+	 
+	<update id="update" parameterType="com.zhiyou.jump.manager.dto.app.UserInfoDto">
+		<![CDATA[
+			UPDATE app_user_info 
+		]]>
+		<set>
+			<if test="nickName">`nickName` = #{nickName}, </if>
+			<if test="avatarUrl != null">`avatarUrl` = #{avatarUrl}, </if>
+			<if test="gender != null">`gender` = #{gender}, </if>
+			<if test="score != null">`score` = #{score}, </if>
+			<if test="createTime != null">`createTime` = #{createTime}, </if>
+			<if test="modifiedTime != null">`modifiedTime` = #{modifiedTime} </if>
+		</set>
+		<where>
+			<![CDATA[userId = #{userId}]]>	
+		</where>
+	</update>
+	
+	<select id="countRank" resultType="int">
+		<![CDATA[
+			SELECT
+				COUNT(*)
+			FROM
+				app_user_info AS a
+		]]>
+	</select>
+	
+	<select id="listRank" resultType="com.zhiyou.jump.manager.dto.app.UserInfoDto">
+		<![CDATA[
+			SELECT
+				@rowno :=@rowno + 1 AS rankNum,
+				c.userId,
+				c.openid,
+				c.nickName,
+				c.avatarUrl,
+				c.gender,
+				c.score,
+				c.createTime,
+				c.modifiedTime
+			FROM
+				(
+					SELECT
+						a.userId,
+						a.openid,
+						a.nickName,
+						a.avatarUrl,
+						a.gender,
+						a.score,
+						a.createTime,
+						a.modifiedTime
+					FROM
+						app_user_info AS a
+					ORDER BY
+						a.score DESC
+				) c, (SELECT @rowno := 0) d
+			limit #{startIndex}, #{pageSize}
+		]]>
+	</select>
+	
+	<update id="resetScore">
+		<![CDATA[
+			UPDATE app_user_info SET score = 0
+		]]>
+	</update>
+	
+</mapper>

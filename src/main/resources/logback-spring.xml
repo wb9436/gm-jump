@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration  scan="true" scanPeriod="60 seconds" debug="false">
+    <contextName>JUMP</contextName>  
+    
+    <!-- 控制台输出 -->   
+    <appender name="CONSILE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder"> 
+             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符--> 
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>  
+            <charset>UTF-8</charset> 
+        </encoder> 
+    </appender>
+    
+    <logger name="om.zhiyou.jump" additivity="false">
+        <appender-ref ref="CONSILE"/>
+    </logger>
+    
+    <!-- 日志输出级别 -->
+    <root level="WARN">
+        <appender-ref ref="CONSILE" />
+    </root> 
+
+</configuration>

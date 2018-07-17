@@ -1,0 +1,51 @@
+server:
+  session:
+    timeout: 1800
+  port: 28478
+zhiyou:
+  upload:
+    url: /home/client/upload/jump
+    visit: http://139.224.232.182:28479/upload/jump
+  logoutUri: redirect:https://jump.viplucky.com/login
+logging:
+  level:
+    root: ERROR
+    com.zhiyou.jump: WARN
+spring:
+  datasource:
+    type: com.mchange.v2.c3p0.ComboPooledDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:31306/jump_db?autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: sunyou2017 
+  redis:
+      host: 127.0.0.1
+      port: 16311
+      password:
+      # 连接超时时间（毫秒）
+      timeout: 10000
+      pool:
+        # 连接池中的最大空闲连接
+        maxIdle: 8
+        # 连接池中的最小空闲连接
+        minIdle: 10
+        # 连接池最大连接数（使用负值表示没有限制）
+        maxActive: 40
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        maxWait: -1
+c3p0:
+  driverClass: com.mysql.jdbc.Driver
+  jdbcUrl: jdbc:mysql://127.0.0.1:31306/jump_db?autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false
+  user: root
+  password: sunyou2017
+  minPoolSize: 5
+  maxPoolSize: 20
+  maxIdleTime: 60
+  acquireIncrement: 5
+  maxStatements: 0
+  initialPoolSize: 10
+  idleConnectionTestPeriod: 60
+  acquireRetryAttempts: 30
+  acquireRetryDelay: 1000
+  breakAfterAcquireFailure: true
+  testConnectionOnCheckout: false

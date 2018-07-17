@@ -1,0 +1,26 @@
+zhiyou-share:
+  qrcodeUrl: http://weixin.qq.com/r/Xy8RCSvEyXa2rW9q93pN
+security:
+  basic:
+    enabled: false
+spring:
+  thymeleaf:
+    mode: LEGACYHTML5
+    cache: false
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  profiles: 
+    active: prod
+  http:
+    multipart:
+      max-file-size: 30Mb
+      max-request-size: 30Mb
+  cache:
+    type: ehcache
+    ehcache:
+      config: ehcache.xml
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: mybatis/**/*Dao.xml
